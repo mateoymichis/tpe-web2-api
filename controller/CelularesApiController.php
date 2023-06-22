@@ -17,4 +17,18 @@ class CelularesApiController {
         $celulares = $this->model->getCelulares();
         $this->view->response($celulares, 200);
     }
+
+    public function getDetalleCelular($params = null) {
+        // obtiene el parametro de la ruta
+        $id = $params[':ID'];
+        
+        $celular = $this->model->getDetalleCelular($id);
+        
+        if ($celular) {
+            $this->view->response($celular, 200);
+        } else {
+            $this->view->response("No existe el celular con el id={$id}", 404);
+        }
+    }
+
 }
