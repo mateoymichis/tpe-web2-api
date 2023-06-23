@@ -28,4 +28,9 @@ class CelularesModel {
 
         return $celular;
     }
+
+    public function borrarCelular($id) {
+        $sentencia = $this->db->prepare("DELETE FROM celulares WHERE id_celular=?");
+        $sentencia->execute(array($id));
+    }
 }

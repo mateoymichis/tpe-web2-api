@@ -10,6 +10,7 @@ $router = new Router();
 // rutas
 $router->addRoute("celulares", "GET", "CelularesApiController", "getCelulares");
 $router->addRoute("celulares/:ID", "GET", "CelularesApiController", "getDetalleCelular");
+$router->addRoute("celulares/:ID", "DELETE", "CelularesApiController", "borrarCelular");
 
 //run
 $router->route($_GET['resource'], $_SERVER['REQUEST_METHOD']);
