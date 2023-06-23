@@ -18,6 +18,14 @@ class CelularesModel {
         return $celulares;
     }
 
+    public function getCelular($id) {
+        $sentencia = $this->db->prepare(("SELECT * FROM celulares WHERE id_celular=?"));
+        $sentencia->execute(array($id));
+        $celular = $sentencia->fetch(PDO::FETCH_OBJ);
+
+        return $celular;
+    }
+
     public function getDetalleCelular($id) {
         $sentencia = $this->db->prepare(("SELECT c.id_celular, c.modelo, c.descripcion, c.imagen, m.nombre AS marca
                                             FROM celulares AS c

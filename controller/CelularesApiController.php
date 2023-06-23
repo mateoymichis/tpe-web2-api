@@ -56,7 +56,7 @@ class CelularesApiController {
         $imagen = $body->imagen;
         $marca_id = $body->marca_id;
         $id = $this->model->crearCelular($modelo, $descripcion, $imagen, $marca_id);
-        $celular = $this->model->getDetalleCelular($id);
+        $celular = $this->model->getCelular($id);
     
         if($celular) {
             $this->view->response("Celular creado con éxito", 201);
@@ -66,4 +66,19 @@ class CelularesApiController {
         }
     }
 
+    public function editarCelular($params = null) {
+        $id = $params[':ID'];
+        $celular = $this->model->getCelular($id);
+        if($celular) {
+            $body = $this->getData();
+            $modelo = $body->modelo;
+            $descripcion = $body->descripcion;
+            $imagen = $body->imagen;
+            $marca_id = $body->marca_id;
+            $cel = $this->model->editarCelular($modelo, $descripcion, $imagen, $marca_id, $id);
+            $this->view->response("Celular id:{$id} actualizado con éxito", 200);
+        } else {
+            $this->view->response("Celular id:{$id} no encontrado", 404);
+        }
+    }
 }
