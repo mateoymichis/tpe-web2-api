@@ -33,4 +33,17 @@ class CelularesModel {
         $sentencia = $this->db->prepare("DELETE FROM celulares WHERE id_celular=?");
         $sentencia->execute(array($id));
     }
+
+    public function crearCelular($modelo, $descripcion, $imagen, $marca_id) {
+        $sentencia = $this->db->prepare("INSERT INTO celulares(modelo, descripcion, imagen, marca_id)
+                                        VALUES(?, ?, ?, ?)");
+        $sentencia->execute(array($modelo, $descripcion, $imagen, $marca_id));
+        return $this->db->lastInsertId();
+    }
+
+    public function editarCelular($modelo, $descripcion, $imagen, $marca_id, $id) {
+        $sentencia = $this->db->prepare("UPDATE celulares SET modelo=?, descripcion=?, imagen=?, marca_id=?
+                                        WHERE id_celular=?");
+        $sentencia->execute(array($modelo, $descripcion, $imagen, $marca_id, $id));
+    }
 }
