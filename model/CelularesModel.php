@@ -18,6 +18,20 @@ class CelularesModel {
         return $celulares;
     }
 
+    public function getCelularesOrderBy($columna, $direccion) {
+        $sentencia = $this->db->prepare(("  SELECT c.id_celular AS id, c.modelo, c.descripcion,
+                                            c.imagen, m.nombre AS marca
+                                            FROM celulares AS c
+                                            JOIN marcas AS m ON c.marca_id = m.id_marca
+                                            ORDER BY $columna $direccion;"));
+        //manejar errores
+        //$sentencia->bindParam(':columna', $columna);
+        $sentencia->execute();
+        $celulares = $sentencia->fetchAll(PDO::FETCH_OBJ);
+
+        return $celulares;
+    }
+
     public function getCelular($id) {
         $sentencia = $this->db->prepare(("SELECT * FROM celulares WHERE id_celular=?"));
         $sentencia->execute(array($id));

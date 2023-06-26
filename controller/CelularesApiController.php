@@ -2,27 +2,58 @@
 
 require_once "./model/CelularesModel.php";
 require_once "./view/JSONView.php";
+require_once "./helper/whiteList.php";
 
 class CelularesApiController {
     private $model;
     private $view;
     private $data;
+    private $helper;
 
     public function __construct()
     {
         $this->model = new CelularesModel();
         $this->view = new JSONView();
         $this->data = file_get_contents("php://input");
+        $this->helper = new whiteList();
     }
 
     public function getData() {
         return json_decode($this->data);
     }
 
+    // manejar la excepcion
+
     public function getCelulares($params = null) {
-        $celulares = $this->model->getCelulares();
-        $this->view->response($celulares, 200);
+        if(isset($_REQUEST['order'])) {
+            try {
+                $order = $this->helper->white_list($_REQUEST['order'],
+                ["id", "modelo", "descripcion", "imagen", "marca"],
+                "Nombre de campo incorrecto");
+            } catch (Exception $e) {
+                return $this->view->response($e->getMessage(), 404);
+            }
+        }
+        if(isset($_REQUEST['direction'])) {
+            try{
+                $direction = $this->helper->white_list($_REQUEST['direction'],
+                ["asc", "desc"], "Nombre de dirección incorrecta");
+            } catch (Exception $e) {
+                return $this->view->response($e->getMessage(), 404);
+            }
+        } else {
+            $direction = '';
+        }
+        if (isset($order))
+        {
+            $celulares = $this->model->getCelularesOrderBy($order, $direction);
+            $this->view->response($celulares, 200);
+        } else {
+            $celulares = $this->model->getCelulares();
+            $this->view->response($celulares, 200);
+        }
     }
+
 
     public function getDetalleCelular($params = null) {
         // obtiene el parametro de la ruta
