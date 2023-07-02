@@ -8,25 +8,14 @@ class CelularesModel {
         $this->db = new PDO('mysql:host=localhost:33065;'.'dbname=tienda_celulares;', 'root', '');
     }
 
-    public function getCelulares() {
-        $sentencia = $this->db->prepare(("  SELECT c.id_celular, c.modelo, c.descripcion, c.imagen, m.nombre AS marca
-                                            FROM celulares AS c
-                                            JOIN marcas AS m ON c.marca_id = m.id_marca;"));
-        $sentencia->execute();
-        $celulares = $sentencia->fetchAll(PDO::FETCH_OBJ);
-
-        return $celulares;
-    }
-
-    public function getCelularesOrderBy($columna, $direccion) {
+    public function getCelulares($columna, $direccion, $lower, $resultsPerPage, $filter, $value) {
         $sentencia = $this->db->prepare(("  SELECT c.id_celular AS id, c.modelo, c.descripcion,
                                             c.imagen, m.nombre AS marca
                                             FROM celulares AS c
                                             JOIN marcas AS m ON c.marca_id = m.id_marca
-                                            ORDER BY $columna $direccion;"));
-        //manejar errores
-        //$sentencia->bindParam(':columna', $columna);
-        $sentencia->execute();
+                                            WHERE $filter LIKE ?
+                                            ORDER BY $columna $direccion LIMIT  $lower, $resultsPerPage;"));
+        $sentencia->execute(array($value));
         $celulares = $sentencia->fetchAll(PDO::FETCH_OBJ);
 
         return $celulares;

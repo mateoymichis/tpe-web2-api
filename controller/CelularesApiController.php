@@ -4,7 +4,8 @@ require_once "./model/CelularesModel.php";
 require_once "./view/JSONView.php";
 require_once "./helper/whiteList.php";
 
-class CelularesApiController {
+class CelularesApiController extends Exception
+{
     private $model;
     private $view;
     private $data;
@@ -15,52 +16,85 @@ class CelularesApiController {
         $this->model = new CelularesModel();
         $this->view = new JSONView();
         $this->data = file_get_contents("php://input");
-        $this->helper = new whiteList();
+        $this->helper = new WhiteList();
     }
 
-    public function getData() {
+    public function getData()
+    {
         return json_decode($this->data);
     }
 
-    // manejar la excepcion
-
-    public function getCelulares($params = null) {
-        if(isset($_REQUEST['order'])) {
-            try {
-                $order = $this->helper->white_list($_REQUEST['order'],
+    public function getCelulares($params = null)
+    {
+        try {
+            $direction = $this->setParam(
+                'direction',
+                ["asc", "desc"],
+                'Nombre de dirección incorrecta',
+                'ASC'
+            );
+            $order = $this->setParam(
+                'order',
                 ["id", "modelo", "descripcion", "imagen", "marca"],
-                "Nombre de campo incorrecto");
-            } catch (Exception $e) {
-                return $this->view->response($e->getMessage(), 404);
+                'Nombre de campo incorrecto',
+                'id'
+            );
+            $filter = $this->setParam(
+            'filter', ["modelo", "descripcion", "imagen", "marca"],
+            'Nombre de filtro incorrecto',
+            'modelo'
+            );
+            if($filter == 'marca') {
+                $filter = 'm.nombre';
             }
-        }
-        if(isset($_REQUEST['direction'])) {
-            try{
-                $direction = $this->helper->white_list($_REQUEST['direction'],
-                ["asc", "desc"], "Nombre de dirección incorrecta");
+            if (isset($_REQUEST['value'])) {
+                $value = "%{$_REQUEST['value']}%";
+            } else {
+                $value = '%%';
+            }
+            $lower = $this->setNumericParam('lower', 0, 1000000, 0);
+            $resultsPerPage = $this->setNumericParam('results', 4, 50, 10);
+            $celulares = $this->model->getCelulares($order, $direction, $lower, $resultsPerPage, $filter, $value);
+            $this->view->response($celulares, 200);
+        
+        } catch (Exception){}
+        
+    }
+
+    public function setParam($name, $whiteList, $message, $default)
+    {
+        if (isset($_REQUEST[$name])) {
+            try {
+                return $this->helper->white_list($_REQUEST[$name], $whiteList, $message);
             } catch (Exception $e) {
-                return $this->view->response($e->getMessage(), 404);
+                $this->view->response($e->getMessage() . ': ' . $_REQUEST[$name], 404);
             }
         } else {
-            $direction = '';
+            return $default;
         }
-        if (isset($order))
-        {
-            $celulares = $this->model->getCelularesOrderBy($order, $direction);
-            $this->view->response($celulares, 200);
+    }
+
+    public function setNumericParam($name, $min, $max, $default)
+    {
+        if (isset($_REQUEST[$name])) {
+            if ($_REQUEST[$name] >= $min && $_REQUEST[$name] <= $max) {
+                return $_REQUEST[$name];
+            } else {
+                return $default;
+            }
         } else {
-            $celulares = $this->model->getCelulares();
-            $this->view->response($celulares, 200);
+            return $default;
         }
     }
 
 
-    public function getDetalleCelular($params = null) {
+    public function getDetalleCelular($params = null)
+    {
         // obtiene el parametro de la ruta
         $id = $params[':ID'];
-        
+
         $celular = $this->model->getDetalleCelular($id);
-        
+
         if ($celular) {
             $this->view->response($celular, 200);
         } else {
@@ -68,7 +102,8 @@ class CelularesApiController {
         }
     }
 
-    public function borrarCelular($params = null) {
+    public function borrarCelular($params = null)
+    {
         $id = $params[':ID'];
         $celular = $this->model->getDetalleCelular($id);
 
@@ -79,7 +114,8 @@ class CelularesApiController {
         }
     }
 
-    public function crearCelular($params = null) {
+    public function crearCelular($params = null)
+    {
         $body = $this->getData();
         //modelo, descripcion, imagen, marca_id
         $modelo = $body->modelo;
@@ -88,19 +124,19 @@ class CelularesApiController {
         $marca_id = $body->marca_id;
         $id = $this->model->crearCelular($modelo, $descripcion, $imagen, $marca_id);
         $celular = $this->model->getCelular($id);
-    
-        if($celular) {
+
+        if ($celular) {
             $this->view->response("Celular creado con éxito", 201);
-        }
-        else {
+        } else {
             $this->view->response("No se pudo crear el celular", 404);
         }
     }
 
-    public function editarCelular($params = null) {
+    public function editarCelular($params = null)
+    {
         $id = $params[':ID'];
         $celular = $this->model->getCelular($id);
-        if($celular) {
+        if ($celular) {
             $body = $this->getData();
             $modelo = $body->modelo;
             $descripcion = $body->descripcion;

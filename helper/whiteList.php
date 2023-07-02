@@ -1,5 +1,5 @@
 <?php
-class whiteList {
+class WhiteList {
     public function white_list($value, $allowed, $message) {
         if ($value === null) {
             return $allowed[0];
