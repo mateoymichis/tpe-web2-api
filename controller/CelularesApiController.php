@@ -3,25 +3,35 @@
 require_once "./model/CelularesModel.php";
 require_once "./view/JSONView.php";
 require_once "./helper/whiteList.php";
+require_once "./helper/AuthHelper.php";
 
-class CelularesApiController extends Exception
+class CelularesApiController
 {
     private $model;
     private $view;
     private $data;
-    private $helper;
+    private $paramsHelper;
+    private $authHelper;
 
     public function __construct()
     {
         $this->model = new CelularesModel();
         $this->view = new JSONView();
         $this->data = file_get_contents("php://input");
-        $this->helper = new WhiteList();
+        $this->paramsHelper = new WhiteList();
+        $this->authHelper = new AuthHelper();
     }
 
     public function getData()
     {
         return json_decode($this->data);
+    }
+
+    public function esAdmin() {
+        if(!($this->authHelper->validarPermisos())) {
+            $this->view->response("No tiene autorización para realizar esta acción", 401);
+            die();
+        }
     }
 
     public function getCelulares($params = null)
@@ -65,7 +75,7 @@ class CelularesApiController extends Exception
     {
         if (isset($_REQUEST[$name])) {
             try {
-                return $this->helper->white_list($_REQUEST[$name], $whiteList, $message);
+                return $this->paramsHelper->white_list($_REQUEST[$name], $whiteList, $message);
             } catch (Exception $e) {
                 $this->view->response($e->getMessage() . ': ' . $_REQUEST[$name], 404);
             }
@@ -104,6 +114,7 @@ class CelularesApiController extends Exception
 
     public function borrarCelular($params = null)
     {
+        $this->esAdmin();
         $id = $params[':ID'];
         $celular = $this->model->getDetalleCelular($id);
 
@@ -116,6 +127,7 @@ class CelularesApiController extends Exception
 
     public function crearCelular($params = null)
     {
+        $this->esAdmin();
         $body = $this->getData();
         //modelo, descripcion, imagen, marca_id
         $modelo = $body->modelo;
@@ -134,6 +146,7 @@ class CelularesApiController extends Exception
 
     public function editarCelular($params = null)
     {
+        $this->esAdmin();
         $id = $params[':ID'];
         $celular = $this->model->getCelular($id);
         if ($celular) {
