@@ -129,6 +129,7 @@ class CelularesApiController
         $celular = $this->model->getDetalleCelular($id);
 
         if ($celular) {
+            $this->model->borrarCelular($id);
             $this->view->response("Celular id:{$id} eliminado con éxito", 200);
         } else {
             $this->view->response("No existe el celular con el id={$id}", 404);
