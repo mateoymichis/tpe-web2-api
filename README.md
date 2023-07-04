@@ -1,4 +1,19 @@
-# API Celulares
+# Trabajo práctico especial (2da parte)- Web 2
+## API Celulares
+
+### Desarrollado por
+- Mateo Fernandez
+
+## Descripción del proyecto
+Dando continuidad al proyecto iniciado en https://github.com/mateoymichis/tpe-web2, se desarrolla una API RESTful que utiliza la misma base de datos del proyecto anterior.
+Se utilizaron las tecnologías trabajadas en la materia, por lo que este sitio cuenta con:
+- <b>PHP</b> como lenguaje de desarrollo server side.
+- <b>MySQL</b> como sistema de gestión de bases de datos.
+
+## Endpoints
+
+Todas las rutas indicadas son a partir de la URL base.
+
 
 Elemento  | Valor
 ------------- | -------------
@@ -71,3 +86,50 @@ Body | Json con email y password
 Códigos de respuesta | 201, 404
 Ejemplo de request | POST http://localhost/tpe/api/usuario
 Ejemplo de body | `{"email": "user@gmail.com", "password":"user"}`
+
+Elemento  | Valor
+------------- | -------------
+Descripción | Retorna una lista con todas las marcas
+Endpoint  | /api/marcas
+Verbo HTTP | GET
+Códigos de respuesta | 200, 404
+Ejemplo de request | GET http://localhost/tpe/api/marcas
+
+
+Elemento  | Valor
+------------- | -------------
+Descripción | Retorna una marca dado su id
+Endpoint  | /api/marcas/:ID
+Verbo HTTP | GET
+Parámetro | ID (numero positivo)
+Códigos de respuesta | 200, 404
+Ejemplo de request | GET http://localhost/tpe/api/marcas/12
+
+Elemento  | Valor
+------------- | -------------
+Descripción | Crea una marca dado un json con sus atributos y valores
+Endpoint  | /api/marcas
+Verbo HTTP | POST
+Body | Json con nombre, cuit
+Códigos de respuesta | 201, 404
+Ejemplo de request | POST http://localhost/tpe/api/marcas
+Ejemplo de body | `{"nombre": "Nokia", "cuit": "30684125792"}`
+
+Elemento  | Valor
+------------- | -------------
+Descripción | Elimina una marca dado su id
+Endpoint  | /api/marcas/:ID
+Verbo HTTP | DELETE
+Parámetro | ID (numero positivo)
+Códigos de respuesta | 200, 404
+Ejemplo de request | DELETE http://localhost/tpe/api/marcas/12
+
+Elemento  | Valor
+------------- | -------------
+Descripción | Edita una marca dado su id
+Endpoint  | /api/marca/:ID
+Verbo HTTP | PUT
+Parámetro | ID (numero positivo)
+Códigos de respuesta | 200, 404
+Ejemplo de request | PUT http://localhost/tpe/api/marcas/12
+Ejemplo de body |`{"nombre": "Nokia", "cuit": "30684125792"}`
