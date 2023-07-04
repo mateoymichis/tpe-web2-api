@@ -27,8 +27,9 @@ class CelularesApiController
         return json_decode($this->data);
     }
 
-    public function esAdmin() {
-        if(!($this->authHelper->validarPermisos())) {
+    public function esAdmin()
+    {
+        if (!($this->authHelper->validarPermisos())) {
             $this->view->response("No tiene autorización para realizar esta acción", 401);
             die();
         }
@@ -36,39 +37,36 @@ class CelularesApiController
 
     public function getCelulares($params = null)
     {
-        try {
-            $direction = $this->setParam(
-                'direction',
-                ["asc", "desc"],
-                'Nombre de dirección incorrecta',
-                'ASC'
-            );
-            $order = $this->setParam(
-                'order',
-                ["id", "modelo", "descripcion", "imagen", "marca"],
-                'Nombre de campo incorrecto',
-                'id'
-            );
-            $filter = $this->setParam(
-            'filter', ["modelo", "descripcion", "imagen", "marca"],
+        $direction = $this->setParam(
+            'direction',
+            ["asc", "desc"],
+            'Nombre de dirección incorrecta',
+            'ASC'
+        );
+        $order = $this->setParam(
+            'order',
+            ["id", "modelo", "descripcion", "imagen", "marca"],
+            'Nombre de campo incorrecto',
+            'id'
+        );
+        $filter = $this->setParam(
+            'filter',
+            ["modelo", "descripcion", "imagen", "marca"],
             'Nombre de filtro incorrecto',
             'modelo'
-            );
-            if($filter == 'marca') {
-                $filter = 'm.nombre';
-            }
-            if (isset($_REQUEST['value'])) {
-                $value = "%{$_REQUEST['value']}%";
-            } else {
-                $value = '%%';
-            }
-            $lower = $this->setNumericParam('lower', 0, 1000000, 0);
-            $resultsPerPage = $this->setNumericParam('results', 4, 50, 10);
-            $celulares = $this->model->getCelulares($order, $direction, $lower, $resultsPerPage, $filter, $value);
-            $this->view->response($celulares, 200);
-        
-        } catch (Exception){}
-        
+        );
+        if ($filter == 'marca') {
+            $filter = 'm.nombre';
+        }
+        if (isset($_REQUEST['value'])) {
+            $value = "%{$_REQUEST['value']}%";
+        } else {
+            $value = '%%';
+        }
+        $lower = $this->setNumericParam('lower', 0, 1000000, 0);
+        $resultsPerPage = $this->setNumericParam('results', 1, 50, 10);
+        $celulares = $this->model->getCelulares($order, $direction, $lower, $resultsPerPage, $filter, $value);
+        $this->view->response($celulares, 200);
     }
 
     public function setParam($name, $whiteList, $message, $default)
@@ -78,6 +76,7 @@ class CelularesApiController
                 return $this->paramsHelper->white_list($_REQUEST[$name], $whiteList, $message);
             } catch (Exception $e) {
                 $this->view->response($e->getMessage() . ': ' . $_REQUEST[$name], 404);
+                die();
             }
         } else {
             return $default;

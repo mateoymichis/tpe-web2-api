@@ -1,16 +1,18 @@
-<?php 
+<?php
 
 require_once './model/UsuariosModel.php';
 require_once './view/JSONView.php';
 require_once './helper/AuthHelper.php';
 
-class UsuariosApiController {
+class UsuariosApiController
+{
     private $view;
     private $model;
     private $authHelper;
     private $data;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->data = file_get_contents("php://input");
         $this->view = new JSONView();
         $this->model = new UsuariosModel();
@@ -22,15 +24,16 @@ class UsuariosApiController {
         return json_decode($this->data);
     }
 
-    public function login() {
+    public function login()
+    {
         $datos = $this->getData();
         $usuario = $datos->email;
         $pass = $datos->password;
-        if(empty($usuario) || empty($pass)) {
+        if (empty($usuario) || empty($pass)) {
             return $this->view->response("Debe indicar el email y la contraseña del usuario", 400);
         }
         $usuario = $this->model->getByEmail($usuario);
-        if($usuario  && password_verify($pass, $usuario->password)) {
+        if ($usuario  && password_verify($pass, $usuario->password)) {
             $token = $this->authHelper->getToken($usuario);
             $this->view->response($token, 200);
         } else {
@@ -38,4 +41,20 @@ class UsuariosApiController {
         }
     }
 
+    public function crearUsuario()
+    {
+        $datos = $this->getData();
+        $usuario = $datos->email;
+        $pass = $datos->password;
+        if (empty($usuario) || empty($pass)) {
+            return $this->view->response("Debe indicar el email y la contraseña del usuario", 400);
+        }
+        $id = $this->model->createUser($usuario, $pass);
+
+        if ($usuario) {
+            return $this->view->response("Usuario {$id} creado exitosamente", 201);
+        } else {
+            $this->view->response("No se pudo crear el usuario", 400);
+        }
+    }
 }

@@ -17,7 +17,7 @@ class UsuariosModel {
 
     public function createUser($email, $pass) {
         $hash = password_hash($pass, PASSWORD_DEFAULT);
-        $query = $this->db->prepare('INSERT INTO usuarios(email, pass) VALUES (?, ?)');
+        $query = $this->db->prepare('INSERT INTO usuarios(email, password) VALUES (?, ?)');
         $query->execute(array($email, $hash));
         return $this->db->lastInsertId();
     }

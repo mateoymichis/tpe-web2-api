@@ -82,13 +82,4 @@ class AuthHelper{
              return null;
          }
     }
-
-    public function tienePermisos($numero)
-    {
-        if ($this->usuario && $this->usuario->permisos == $numero) {
-            return true;
-        } else {
-            return null;
-        }
-    }
 }
