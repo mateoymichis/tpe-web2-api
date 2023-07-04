@@ -101,7 +101,7 @@ class CelularesApiController
         $tags = array_keys($_REQUEST);
         for($i=0;$i<sizeof($tags)-1;$i++){
             if(!in_array($tags[$i], $params)) {
-                $this->view->response("Parametro incorrecto: {$tags[$i]}", 404);
+                $this->view->response("Parametro incorrecto: {$tags[$i]}", 400);
                 die();
             }
         }

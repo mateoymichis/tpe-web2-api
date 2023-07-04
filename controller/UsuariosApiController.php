@@ -41,7 +41,7 @@ class UsuariosApiController
             $token = $this->authHelper->getToken($usuario);
             $this->view->response($token, 200);
         } else {
-            $this->view->response("Email o contraseña incorrecta", 400);
+            $this->view->response("Email o contraseña incorrecta", 404);
         }
     }
 
@@ -62,7 +62,7 @@ class UsuariosApiController
         if ($usuario) {
             return $this->view->response("Usuario {$id} creado exitosamente", 201);
         } else {
-            $this->view->response("No se pudo crear el usuario", 400);
+            $this->view->response("No se pudo crear el usuario", 404);
         }
     }
 }

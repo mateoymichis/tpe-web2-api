@@ -26,7 +26,7 @@ Parámetro opcional | filter (**modelo**, descripcion, imagen, marca)
 Parámetro opcional | value (string)
 Parámetro opcional | lower (numero mayor o igual a 0) (**0**)
 Parámetro opcional | results (numero mayor a 0 y menor a 51) (**10**)
-Códigos de respuesta | 200, 404
+Códigos de respuesta | 200, 400, 404
 Ejemplo de request | GET http://localhost/tpe/api/celulares?order=descripcion&direction=desc&filter=marca&value=moto&lower=0&results=5
 
 Elemento  | Valor
@@ -73,7 +73,7 @@ Descripción | Inicia sesión dado email y contraseña y retorna un bearer token
 Endpoint  | /api/login
 Verbo HTTP | POST
 Body | Json con email y password
-Códigos de respuesta | 200, 404
+Códigos de respuesta | 200, 400, 404
 Ejemplo de request | POST http://localhost/tpe/api/login
 Ejemplo de body | `{"email": "user@gmail.com", "password":"user"}`
 
@@ -83,7 +83,7 @@ Descripción | Crea un usuario dado email y contraseña
 Endpoint  | /api/usuario
 Verbo HTTP | POST
 Body | Json con email y password
-Códigos de respuesta | 201, 404
+Códigos de respuesta | 201, 400, 404
 Ejemplo de request | POST http://localhost/tpe/api/usuario
 Ejemplo de body | `{"email": "user@gmail.com", "password":"user"}`
 
@@ -111,7 +111,7 @@ Descripción | Crea una marca dado un json con sus atributos y valores (token re
 Endpoint  | /api/marcas
 Verbo HTTP | POST
 Body | Json con nombre, cuit
-Códigos de respuesta | 201, 401, 404
+Códigos de respuesta | 201, 400, 401, 404
 Ejemplo de request | POST http://localhost/tpe/api/marcas
 Ejemplo de body | `{"nombre": "Nokia", "cuit": "30684125792"}`
 

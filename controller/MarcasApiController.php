@@ -77,7 +77,7 @@ class MarcasApiController {
         }
         $cuit = $body->cuit;
         if(!is_numeric($cuit)) {
-            $this->view->response("El CUIT debe ser un numero", 404);
+            $this->view->response("El CUIT debe ser un numero", 400);
             die();
         }
         $id = $this->model->crearMarca($nombre, $cuit);
