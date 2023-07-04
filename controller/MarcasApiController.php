@@ -71,7 +71,15 @@ class MarcasApiController {
         $this->esAdmin();
         $body = $this->getData();
         $nombre = $body->nombre;
+        if($this->model->getMarcaByName($nombre)) {
+            $this->view->response("Esa marca ya existe", 404);
+            die();
+        }
         $cuit = $body->cuit;
+        if(!is_numeric($cuit)) {
+            $this->view->response("El CUIT debe ser un numero", 404);
+            die();
+        }
         $id = $this->model->crearMarca($nombre, $cuit);
         $marca = $this->model->getMarca($id);
 

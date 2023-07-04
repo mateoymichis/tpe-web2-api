@@ -32,6 +32,14 @@ class MarcasModel {
         return $marca;
     }
 
+    public function getMarcaByName($name) {
+        $sentencia = $this->db->prepare(("SELECT * FROM marcas WHERE nombre=?"));
+        $sentencia->execute(array($name));
+        $marca = $sentencia->fetch(PDO::FETCH_OBJ);
+
+        return $marca;
+    }
+
     public function crearMarca($nombre, $cuit) {
         $sentencia = $this->db->prepare("INSERT INTO marcas(nombre, cuit) VALUES(?, ?)");
         $sentencia->execute(array($nombre, $cuit));

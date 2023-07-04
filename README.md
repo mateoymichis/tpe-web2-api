@@ -40,30 +40,30 @@ Ejemplo de request | GET http://localhost/tpe/api/celulares/12
 
 Elemento  | Valor
 ------------- | -------------
-Descripción | Crea un celular dado un json con sus atributos y valores
+Descripción | Crea un celular dado un json con sus atributos y valores (token requerido)
 Endpoint  | /api/celulares
 Verbo HTTP | POST
 Body | Json con modelo, descripcion, imagen, marca_id
-Códigos de respuesta | 201, 404
+Códigos de respuesta | 201, 401, 404
 Ejemplo de request | POST http://localhost/tpe/api/celulares
 Ejemplo de body | `{"modelo": "C115", "descripcion":"Gran celular retro","imagen":"http://server.com/imagen546", "marca_id":2}`
 
 Elemento  | Valor
 ------------- | -------------
-Descripción | Elimina un celular dado su id
+Descripción | Elimina un celular dado su id (token requerido)
 Endpoint  | /api/celulares/:ID
 Verbo HTTP | DELETE
 Parámetro | ID (numero positivo)
-Códigos de respuesta | 200, 404
+Códigos de respuesta | 200, 401, 404
 Ejemplo de request | DELETE http://localhost/tpe/api/celulares/12
 
 Elemento  | Valor
 ------------- | -------------
-Descripción | Edita un celular dado su id
+Descripción | Edita un celular dado su id (token requerido)
 Endpoint  | /api/celulares/:ID
 Verbo HTTP | PUT
 Parámetro | ID (numero positivo)
-Códigos de respuesta | 200, 404
+Códigos de respuesta | 200, 401, 404
 Ejemplo de request | PUT http://localhost/tpe/api/celulares/12
 Ejemplo de body | `{"modelo": "C115", "descripcion":"Gran celular retro","imagen":"http://server.com/imagen546", "marca_id":2}`
 
@@ -107,29 +107,29 @@ Ejemplo de request | GET http://localhost/tpe/api/marcas/12
 
 Elemento  | Valor
 ------------- | -------------
-Descripción | Crea una marca dado un json con sus atributos y valores
+Descripción | Crea una marca dado un json con sus atributos y valores (token requerido)
 Endpoint  | /api/marcas
 Verbo HTTP | POST
 Body | Json con nombre, cuit
-Códigos de respuesta | 201, 404
+Códigos de respuesta | 201, 401, 404
 Ejemplo de request | POST http://localhost/tpe/api/marcas
 Ejemplo de body | `{"nombre": "Nokia", "cuit": "30684125792"}`
 
 Elemento  | Valor
 ------------- | -------------
-Descripción | Elimina una marca dado su id
+Descripción | Elimina una marca dado su id (token requerido)
 Endpoint  | /api/marcas/:ID
 Verbo HTTP | DELETE
 Parámetro | ID (numero positivo)
-Códigos de respuesta | 200, 404
+Códigos de respuesta | 200, 401, 404
 Ejemplo de request | DELETE http://localhost/tpe/api/marcas/12
 
 Elemento  | Valor
 ------------- | -------------
-Descripción | Edita una marca dado su id
+Descripción | Edita una marca dado su id (token requerido)
 Endpoint  | /api/marca/:ID
 Verbo HTTP | PUT
 Parámetro | ID (numero positivo)
-Códigos de respuesta | 200, 404
+Códigos de respuesta | 200, 401, 404
 Ejemplo de request | PUT http://localhost/tpe/api/marcas/12
 Ejemplo de body |`{"nombre": "Nokia", "cuit": "30684125792"}`

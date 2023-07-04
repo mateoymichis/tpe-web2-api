@@ -37,6 +37,7 @@ class CelularesApiController
 
     public function getCelulares($params = null)
     {
+        $this->checkKeys(['direction', 'order', 'filter', 'value', 'lower', 'results', 'resource']);
         $direction = $this->setParam(
             'direction',
             ["asc", "desc"],
@@ -93,6 +94,16 @@ class CelularesApiController
             }
         } else {
             return $default;
+        }
+    }
+
+    public function checkKeys($params) {
+        $tags = array_keys($_REQUEST);
+        for($i=0;$i<sizeof($tags)-1;$i++){
+            if(!in_array($tags[$i], $params)) {
+                $this->view->response("Parametro incorrecto: {$tags[$i]}", 404);
+                die();
+            }
         }
     }
 

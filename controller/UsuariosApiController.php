@@ -27,8 +27,12 @@ class UsuariosApiController
     public function login()
     {
         $datos = $this->getData();
-        $usuario = $datos->email;
-        $pass = $datos->password;
+        if (isset($datos->email) && isset($datos->password)) {
+            $usuario = $datos->email;
+            $pass = $datos->password;
+        } else {
+            return $this->view->response("Debe indicar el email y la contraseña del usuario", 400);
+        }
         if (empty($usuario) || empty($pass)) {
             return $this->view->response("Debe indicar el email y la contraseña del usuario", 400);
         }
@@ -44,8 +48,12 @@ class UsuariosApiController
     public function crearUsuario()
     {
         $datos = $this->getData();
-        $usuario = $datos->email;
-        $pass = $datos->password;
+        if (isset($datos->email) && isset($datos->password)) {
+            $usuario = $datos->email;
+            $pass = $datos->password;
+        } else {
+            return $this->view->response("Debe indicar el email y la contraseña del usuario", 400);
+        }
         if (empty($usuario) || empty($pass)) {
             return $this->view->response("Debe indicar el email y la contraseña del usuario", 400);
         }
